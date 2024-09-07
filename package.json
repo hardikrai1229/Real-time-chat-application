@@ -25,6 +25,7 @@
     "socket.io": "^4.7.5"
   },
   "devDependencies": {
+    "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "webpack-cli": "^5.1.4"
   }
 }
