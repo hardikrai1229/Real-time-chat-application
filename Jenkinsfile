@@ -6,12 +6,7 @@ pipeline {
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
   }
 
-  tools {
-    sonarQubeScanner 'SonarScanner' // Must match Global Tool Configuration name
-  }
-
   stages {
-
     stage('Clone Repository') {
       steps {
         git branch: 'main', url: 'https://github.com/hardikrai1229/Real-time-chat-application'
@@ -52,8 +47,10 @@ pipeline {
 
     stage('SonarQube Analysis') {
       steps {
-        withSonarQubeEnv('SonarQube') {
-          sh 'sonar-scanner'
+        script {
+          withSonarQubeEnv('SonarQube') {
+            sh 'sonar-scanner'
+          }
         }
       }
     }
@@ -76,7 +73,7 @@ pipeline {
 
   post {
     success {
-      echo '✅ Build, analysis, and push completed successfully!'
+      echo '✅ Build, Sonar analysis, and push completed successfully!'
     }
     failure {
       echo '❌ Pipeline failed. Please check the console logs.'
