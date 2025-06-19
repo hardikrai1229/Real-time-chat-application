@@ -7,6 +7,7 @@ pipeline {
   }
 
   stages {
+
     stage('Clone Repository') {
       steps {
         git branch: 'main', url: 'https://github.com/hardikrai1229/Real-time-chat-application'
@@ -73,7 +74,7 @@ pipeline {
 
   post {
     success {
-      echo '✅ Build, Sonar analysis, and push completed successfully!'
+      echo '✅ Build and push completed successfully!'
     }
     failure {
       echo '❌ Pipeline failed. Please check the console logs.'
