@@ -1,0 +1,21 @@
+# Dockerfile.backend
+
+FROM node:18
+
+WORKDIR /app
+
+# Copy root package.json and lock
+COPY package*.json ./
+
+# Install backend dependencies
+RUN npm install --legacy-peer-deps
+
+# Copy backend source code only
+COPY backend/ ./backend
+
+# Set working directory to backend
+WORKDIR /app/backend
+
+EXPOSE 8000
+
+CMD ["node", "server.js"]

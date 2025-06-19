@@ -1,0 +1,22 @@
+# Dockerfile.frontend
+
+FROM node:18
+
+WORKDIR /app
+
+# Copy only root and frontend packages
+COPY package*.json ./
+COPY frontend/package*.json ./frontend/
+
+# Install frontend dependencies
+RUN npm install --legacy-peer-deps --prefix frontend
+
+# Copy entire frontend folder
+COPY frontend/ ./frontend
+
+# Build React app
+RUN npm run build --prefix frontend
+
+# Serve static frontend build
+RUN npm install -g serve
+CMD ["serve", "-s", "frontend/build", "-l", "3000"]
