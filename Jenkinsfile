@@ -6,6 +6,10 @@ pipeline {
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
   }
 
+  tools {
+    sonarQubeScanner 'SonarScanner' // Must match Global Tool Configuration name
+  }
+
   stages {
 
     stage('Clone Repository') {
@@ -46,6 +50,14 @@ pipeline {
       }
     }
 
+    stage('SonarQube Analysis') {
+      steps {
+        withSonarQubeEnv('SonarQube') {
+          sh 'sonar-scanner'
+        }
+      }
+    }
+
     stage('Push Images to Docker Hub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
@@ -64,7 +76,7 @@ pipeline {
 
   post {
     success {
-      echo '✅ Build and push completed successfully!'
+      echo '✅ Build, analysis, and push completed successfully!'
     }
     failure {
       echo '❌ Pipeline failed. Please check the console logs.'
