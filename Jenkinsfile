@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+tools {
+    sonarScanner 'sonar-scanner' // This must match the tool name in Jenkins
+  }
+  
   environment {
     FRONTEND_IMAGE = 'hardikrai1229/mern-frontend:latest'
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
