@@ -1,6 +1,9 @@
 pipeline {
   agent any
   
+  tools {
+    sonarScanner 'sonar-scanner'
+  }
   environment {
     FRONTEND_IMAGE = 'hardikrai1229/mern-frontend:latest'
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
@@ -50,7 +53,7 @@ pipeline {
       steps {
         script {
           withSonarQubeEnv('SonarQube') {
-            sh 'mvn clean package sonar:sonar'
+            sh 'sonar-scanner'
           }
         }
       }
