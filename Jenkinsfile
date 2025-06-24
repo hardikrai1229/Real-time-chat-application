@@ -1,6 +1,6 @@
 pipeline {
   agent any
-  
+
   environment {
     FRONTEND_IMAGE = 'hardikrai1229/mern-frontend:latest'
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
@@ -46,17 +46,16 @@ pipeline {
       }
     }
 
- stage('SonarQube Analysis') {
-  steps {
-    withSonarQubeEnv('SonarQube') {
-      script {
-        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-        sh "${scannerHome}/bin/sonar-scanner"
+    stage('SonarQube Analysis') {
+      steps {
+        script {
+          def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+          withSonarQubeEnv('SonarQube') {
+            sh "${scannerHome}/bin/sonar-scanner"
+          }
+        }
       }
     }
-  }
-}
-
 
     stage('Push Images to Docker Hub') {
       steps {
