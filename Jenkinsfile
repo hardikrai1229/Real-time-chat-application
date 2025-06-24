@@ -54,7 +54,7 @@ pipeline {
   steps {
     sh '''
       mvn sonar:sonar \
-        -Dsonar.projectKey=sample_project \
+        -Dsonar.projectKey=chatapp \
         -Dsonar.host.url=$SONAR_HOST_URL \
         -Dsonar.login=$SONAR_AUTH_TOKEN
     '''
