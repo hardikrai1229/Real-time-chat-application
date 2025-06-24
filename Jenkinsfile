@@ -46,15 +46,17 @@ pipeline {
       }
     }
 
-    stage('SonarQube Analysis') {
-      steps {
-        script {
-          withSonarQubeEnv('SonarQube') {
-            sh "sonar-scanner"
-          }
-        }
+ stage('SonarQube Analysis') {
+  steps {
+    withSonarQubeEnv('SonarQube') {
+      script {
+        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        sh "${scannerHome}/bin/sonar-scanner"
       }
     }
+  }
+}
+
 
     stage('Push Images to Docker Hub') {
       steps {
