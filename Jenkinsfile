@@ -6,10 +6,6 @@ pipeline {
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
   }
 
-  tools {
-    // Ensure 'sonar-scanner' is configured under Manage Jenkins > Global Tool Configuration
-    sonarScanner 'sonar-scanner'
-  }
 
   stages {
 
@@ -51,16 +47,17 @@ pipeline {
       }
     }
 
-    stage('SonarQube Analysis') {
-      steps {
-        withSonarQubeEnv('SonarQube') {
-          script {
-            def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
-            bat "\"${scannerHome}\\bin\\sonar-scanner.bat\""
-          }
-        }
+stage('SonarQube Analysis') {
+  steps {
+    withSonarQubeEnv('SonarQube') {
+      script {
+        def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+        bat "\"${scannerHome}\\bin\\sonar-scanner.bat\""
       }
     }
+  }
+}
+
 
     stage('Push Images to Docker Hub') {
       steps {
