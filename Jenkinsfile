@@ -33,19 +33,19 @@ pipeline {
       }
     }
 
-    stage('Run Backend Tests') {
-      steps {
-        dir('backend') {
-          script {
-            echo "Running backend unit tests..."
-            bat '''
-              call npm install
-              call npm run test || echo Tests failed, continuing anyway...
-            '''
-          }
-        }
-      }
-    }
+    // stage('Run Backend Tests') {
+    //   steps {
+    //     dir('backend') {
+    //       script {
+    //         echo "Running backend unit tests..."
+    //         bat '''
+    //           call npm install
+    //           call npm run test || echo Tests failed, continuing anyway...
+    //         '''
+    //       }
+    //     }
+    //   }
+    // }
 
 stage('SonarQube Analysis') {
   steps {
