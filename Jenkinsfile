@@ -6,6 +6,11 @@ pipeline {
     BACKEND_IMAGE  = 'hardikrai1229/mern-backend:latest'
   }
 
+  tools {
+    // Ensure 'sonar-scanner' is configured under Manage Jenkins > Global Tool Configuration
+    sonarScanner 'sonar-scanner'
+  }
+
   stages {
 
     stage('Clone Repository') {
@@ -18,7 +23,7 @@ pipeline {
       steps {
         script {
           echo "Building frontend Docker image..."
-          sh 'docker build -f Dockerfile.frontend -t $FRONTEND_IMAGE .'
+          bat 'docker build -f Dockerfile.frontend -t %FRONTEND_IMAGE% .'
         }
       }
     }
@@ -27,7 +32,7 @@ pipeline {
       steps {
         script {
           echo "Building backend Docker image..."
-          sh 'docker build -f Dockerfile.backend -t $BACKEND_IMAGE .'
+          bat 'docker build -f Dockerfile.backend -t %BACKEND_IMAGE% .'
         }
       }
     }
@@ -37,9 +42,9 @@ pipeline {
         dir('backend') {
           script {
             echo "Running backend unit tests..."
-            sh '''
-              npm install
-              npm run test || echo "Tests failed, continuing anyway..."
+            bat '''
+              call npm install
+              call npm run test || echo Tests failed, continuing anyway...
             '''
           }
         }
@@ -47,30 +52,25 @@ pipeline {
     }
 
     stage('SonarQube Analysis') {
-  environment {
-    SONAR_HOST_URL = 'http://192.168.1.15:9000' // Replace with your SonarQube URL
-    SONAR_AUTH_TOKEN = credentials('chatapp')        // Store your token in Jenkins credentials
-  }
-  steps {
-    sh '''
-      mvn sonar:sonar \
-        -Dsonar.projectKey=chatapp \
-        -Dsonar.host.url=$SONAR_HOST_URL \
-        -Dsonar.login=$SONAR_AUTH_TOKEN
-    '''
-  }
-}
-
+      steps {
+        withSonarQubeEnv('SonarQube') {
+          script {
+            def scannerHome = tool name: 'sonar-scanner', type: 'hudson.plugins.sonar.SonarRunnerInstallation'
+            bat "\"${scannerHome}\\bin\\sonar-scanner.bat\""
+          }
+        }
+      }
+    }
 
     stage('Push Images to Docker Hub') {
       steps {
         withCredentials([usernamePassword(credentialsId: 'dockerhub-creds', usernameVariable: 'DOCKER_USER', passwordVariable: 'DOCKER_PASS')]) {
           script {
             echo "Pushing images to Docker Hub..."
-            sh '''
-              echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin
-              docker push $FRONTEND_IMAGE
-              docker push $BACKEND_IMAGE
+            bat '''
+              echo %DOCKER_PASS% | docker login -u %DOCKER_USER% --password-stdin
+              docker push %FRONTEND_IMAGE%
+              docker push %BACKEND_IMAGE%
             '''
           }
         }
