@@ -58,6 +58,13 @@ stage('SonarQube Analysis') {
   }
 }
 
+    stage('Quality Gate Check') {
+      steps {
+        timeout(time: 2, unit: 'MINUTES') {
+          waitForQualityGate abortPipeline: true
+        }
+      }
+    }
 
     stage('Push Images to Docker Hub') {
       steps {
