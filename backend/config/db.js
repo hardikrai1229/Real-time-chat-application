@@ -15,8 +15,8 @@ const mongoose = require("mongoose");
 // };
 
 // Hardcoded connection string (should be in environment variables)
-// const MONGO_URI =
-//   "mongodb+srv://admin:admin123@cluster0.mongodb.net/myapp?retryWrites=true&w=majority";
+const MONGO_URI =
+  "mongodb+srv://admin:admin123@cluster0.mongodb.net/myapp?retryWrites=true&w=majority";
 
 const connectDB = async () => {
   try {
