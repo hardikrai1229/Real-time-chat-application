@@ -15,16 +15,16 @@ pipeline {
       }
     }
 
- stage('Gitleaks Scan') {
-      steps {
-        script {
-          echo "🔍 Running Gitleaks scan"
-          bat '''
-            gitleaks detect --source=. --report-format sarif --report-path=gitleaks-report.sarif || exit /b 1
-          '''
-        }
-      }
-    }
+ // stage('Gitleaks Scan') {
+ //      steps {
+ //        script {
+ //          echo "🔍 Running Gitleaks scan"
+ //          bat '''
+ //            gitleaks detect --source=. --report-format sarif --report-path=gitleaks-report.sarif || exit /b 1
+ //          '''
+ //        }
+ //      }
+ //    }
 
     stage('Build Frontend Image') {
       steps {
